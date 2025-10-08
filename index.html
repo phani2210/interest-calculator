@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interest Calculator and Loan Tracker for Rural Communities">
+    <title>వడ్డీ లెక్కింపు మరియు రుణ ట్రాకర్ | Interest Calculator & Loan Tracker</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2E7D32">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Loan Tracker">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>వడ్డీ లెక్కింపు</h2>
+            <p>Interest Calculator</p>
+        </div>
+    </div>
+
+    <!-- App Container -->
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <button id="menu-btn" class="menu-btn" aria-label="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="app-title">
+                    <span class="title-telugu">వడ్డీ లెక్కింపు</span>
+                    <span class="title-english">Interest Calculator</span>
+                </h1>
+                <div class="header-actions">
+                    <button id="voice-btn" class="voice-btn" aria-label="Voice Assistant">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button id="sync-btn" class="sync-btn" aria-label="Sync Status">
+                        <i class="fas fa-cloud" id="sync-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Menu -->
+        <nav id="nav-menu" class="nav-menu">
+            <div class="nav-header">
+                <h3>మెనూ | Menu</h3>
+                <button id="close-menu" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <ul class="nav-list">
+                <li><a href="#dashboard" data-page="dashboard"><i class="fas fa-home"></i> <span>హోమ్ | Home</span></a></li>
+                <li><a href="#calculator" data-page="calculator"><i class="fas fa-calculator"></i> <span>వడ్డీ లెక్కింపు | Calculator</span></a></li>
+                <li><a href="#loans" data-page="loans"><i class="fas fa-list"></i> <span>రుణాలు | Loans</span></a></li>
+                <li><a href="#reports" data-page="reports"><i class="fas fa-chart-bar"></i> <span>రిపోర్ట్స్ | Reports</span></a></li>
+                <li><a href="#settings" data-page="settings"><i class="fas fa-cog"></i> <span>సెట్టింగ్స్ | Settings</span></a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="mainContent" class="main-content">
+            <!-- Loading Screen -->
+            <div id="loadingScreen" class="loading-screen">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">లోడ్ అవుతోంది... / Loading...</p>
+            </div>
+
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="page active">
+                <div class="dashboard-header">
+                    <h2>డాష్‌బోర్డ్ / Dashboard</h2>
+                    <div class="sync-status" id="syncStatus">
+                        <i class="fas fa-wifi"></i>
+                        <span>ఆన్‌లైన్ / Online</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>మొత్తం లోన్లు / Total Loans</h3>
+                            <p class="card-value" id="totalLoans">0</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>బకాయి / Due Today</h3>
+                            <p class="card-value" id="dueToday">0</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-rupee-sign"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>మొత్తం మొత్తం / Total Amount</h3>
+                            <p class="card-value" id="totalAmount">₹0</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>బకాయి లోన్లు / Overdue Loans</h3>
+                            <p class="card-value" id="overdueLoans">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h3>త్వరిత చర్యలు / Quick Actions</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="app.showPage('calculator')">
+                            <i class="fas fa-calculator"></i>
+                            <span>వడ్డీ లెక్కించు / Calculate Interest</span>
+                        </button>
+                        <button class="action-btn" onclick="app.showPage('loans')">
+                            <i class="fas fa-list"></i>
+                            <span>లోన్లు చూడు / View Loans</span>
+                        </button>
+                        <button class="action-btn" onclick="voiceManager.startListening()">
+                            <i class="fas fa-microphone"></i>
+                            <span>వాయిస్ కమాండ్ / Voice Command</span>
+                        </button>
+                        <button class="action-btn" onclick="app.showPage('reports')">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>రిపోర్ట్లు / Reports</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <h3>ఇటీవలి కార్యకలాపాలు / Recent Activity</h3>
+                    <div id="recentActivity" class="activity-list">
+                        <!-- Recent activity will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculator Page -->
+            <div id="calculatorPage" class="page">
+                <div class="page-header">
+                    <h2>వడ్డీ కాలిక్యులేటర్ / Interest Calculator</h2>
+                </div>
+
+                <div class="calculator-form">
+                    <form id="interestForm">
+                        <div class="form-group">
+                            <label for="loanName">లోన్ పేరు / Loan Name</label>
+                            <input type="text" id="loanName" name="loanName" placeholder="e.g., Home Loan, Personal Loan">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loanAmount">లోన్ మొత్తం / Loan Amount (₹)</label>
+                            <input type="number" id="loanAmount" name="loanAmount" required min="1" step="0.01" placeholder="Enter loan amount">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="interestRate">వడ్డీ రేటు / Interest Rate (%)</label>
+                            <input type="number" id="interestRate" name="interestRate" required min="0" step="0.01" placeholder="Enter interest rate">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="loanDuration">కాలం / Duration</label>
+                                <input type="number" id="loanDuration" name="loanDuration" required min="1" placeholder="Enter duration">
+                            </div>
+                            <div class="form-group">
+                                <label for="durationUnit">యూనిట్ / Unit</label>
+                                <select id="durationUnit" name="durationUnit">
+                                    <option value="years">సంవత్సరాలు / Years</option>
+                                    <option value="months">నెలలు / Months</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>వడ్డీ రకం / Interest Type</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="interestType" value="simple" checked>
+                                    <span>సాధారణ వడ్డీ / Simple Interest</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="interestType" value="compound">
+                                    <span>చక్రవడ్డీ / Compound Interest</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="compoundingOptions" class="form-group" style="display: none;">
+                            <label for="compoundingFrequency">చక్రవడ్డీ ఫ్రీక్వెన్సీ / Compounding Frequency</label>
+                            <select id="compoundingFrequency" name="compoundingFrequency">
+                                <option value="monthly">నెలవారీ / Monthly</option>
+                                <option value="quarterly">త్రైమాసిక / Quarterly</option>
+                                <option value="yearly">సంవత్సరానికి / Yearly</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="startDate">ప్రారంభ తేదీ / Start Date</label>
+                            <input type="date" id="startDate" name="startDate">
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-calculator"></i>
+                                లెక్కించు / Calculate
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.clearForm()">
+                                <i class="fas fa-eraser"></i>
+                                క్లియర్ / Clear
+                            </button>
+                            <button type="button" class="btn btn-voice" onclick="voiceManager.startListening()">
+                                <i class="fas fa-microphone"></i>
+                                వాయిస్ / Voice
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="calculationResults" class="calculation-results" style="display: none;">
+                    <!-- Results will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Loans Page -->
+            <div id="loansPage" class="page">
+                <div class="page-header">
+                    <h2>లోన్ ట్రాకర్ / Loan Tracker</h2>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="app.showPage('calculator')">
+                            <i class="fas fa-plus"></i>
+                            కొత్త లోన్ / New Loan
+                        </button>
+                        <button class="btn btn-secondary" onclick="loanManager.exportLoansData()">
+                            <i class="fas fa-download"></i>
+                            ఎక్స్‌పోర్ట్ / Export
+                        </button>
+                    </div>
+                </div>
+
+                <div class="loans-filters">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="status" data-value="all">అన్నీ / All</button>
+                        <button class="filter-btn" data-filter="status" data-value="active">చురుకు / Active</button>
+                        <button class="filter-btn" data-filter="status" data-value="overdue">బకాయి / Overdue</button>
+                        <button class="filter-btn" data-filter="status" data-value="completed">పూర్తయింది / Completed</button>
+                    </div>
+                    <select id="loanSort" class="sort-select">
+                        <option value="nextDueDate-asc">Due Date (Earliest First)</option>
+                        <option value="nextDueDate-desc">Due Date (Latest First)</option>
+                        <option value="loanAmount-desc">Amount (High to Low)</option>
+                        <option value="loanAmount-asc">Amount (Low to High)</option>
+                        <option value="createdAt-desc">Recently Added</option>
+                    </select>
+                </div>
+
+                <div id="loansSummary" class="loans-summary">
+                    <!-- Summary will be populated by JavaScript -->
+                </div>
+
+                <div id="loansContainer" class="loans-container">
+                    <!-- Loans will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Reports Page -->
+            <div id="reportsPage" class="page">
+                <div class="page-header">
+                    <h2>రిపోర్ట్లు / Reports</h2>
+                </div>
+
+                <div class="reports-content">
+                    <div class="report-cards">
+                        <div class="report-card">
+                            <h3>లోన్ సారాంశం / Loan Summary</h3>
+                            <div id="loanSummaryReport">
+                                <!-- Report content will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="report-card">
+                            <h3>చెల్లింపు చరిత్ర / Payment History</h3>
+                            <div id="paymentHistoryReport">
+                                <!-- Report content will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="report-card">
+                            <h3>వడ్డీ విశ్లేషణ / Interest Analysis</h3>
+                            <div id="interestAnalysisReport">
+                                <!-- Report content will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="export-actions">
+                        <button class="btn btn-primary" onclick="reportsManager.exportPDF()">
+                            <i class="fas fa-file-pdf"></i>
+                            PDF ఎక్స్‌పోర్ట్ / Export PDF
+                        </button>
+                        <button class="btn btn-secondary" onclick="reportsManager.exportCSV()">
+                            <i class="fas fa-file-csv"></i>
+                            CSV ఎక్స్‌పోర్ట్ / Export CSV
+                        </button>
+                        <button class="btn btn-voice" onclick="reportsManager.speakSummary()">
+                            <i class="fas fa-volume-up"></i>
+                            వాయిస్ సారాంశం / Voice Summary
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Voice Assistant Modal -->
+        <div id="voice-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>వాయిస్ అసిస్టెంట్ | Voice Assistant</h3>
+                    <button class="close-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="voice-status">
+                        <div class="voice-indicator">
+                            <div class="voice-wave"></div>
+                        </div>
+                        <p id="voice-status-text">మాట్లాడండి... | Speak now...</p>
+                    </div>
+                    <div class="voice-commands">
+                        <h4>ఉదాహరణ కమాండ్లు | Example Commands:</h4>
+                        <ul>
+                            <li>"10000 రుపాయలకు 12 శాతం వడ్డీ రేటుతో 2 సంవత్సరాలకు లెక్కించు"</li>
+                            <li>"నా రుణాలు చూపించు" | "Show my loans"</li>
+                            <li>"కొత్త రుణం జోడించు" | "Add new loan"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Toast -->
+        <div id="toast" class="toast">
+            <div class="toast-content">
+                <i class="toast-icon"></i>
+                <span class="toast-message"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/storage.js"></script>
+    <script src="js/voice.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/loan-manager.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
